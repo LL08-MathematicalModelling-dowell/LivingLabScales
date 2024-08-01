@@ -402,6 +402,7 @@ class LearningIndexReports(APIView):
         end_ = request.data.get("end_date")
 
         if period == "custom":
+            time1 = time.time()
             serializer = ScaleReportRequestCustomSerializer(data={
                 "scale_id": scale_id,
                 "workspace_id": workspace_id,
@@ -433,6 +434,7 @@ class LearningIndexReports(APIView):
                 if "all" not in instance_names:
                     filters["instance_name"] = {"$in": instance_names}
 
+                time2 = time.time()
 
                 response_text = datacube_data_retrieval(
                     api_key,
@@ -444,6 +446,15 @@ class LearningIndexReports(APIView):
                     False
                 )
                 response = json.loads(response_text)
+                
+                
+                #Using time differences to measure speed of code
+                time3 = time.time()
+                print("time difference 2 & 1", time2-time1)
+                print("time difference 3 & 1", time3-time1)
+                print("time difference 3 & 2", time3-time2)
+
+
 
 
                 if "data" not in response:
